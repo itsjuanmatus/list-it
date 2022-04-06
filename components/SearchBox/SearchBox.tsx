@@ -2,16 +2,53 @@ import React from 'react';
 import InputElement from './InputElement';
 
 export default function SearchBox() {
-  const [isLocationFocused, setIsLocationFocused] = React.useState(false);
-  const [isCategoryFocused, setIsCategoryFocused] = React.useState(false);
-  const [isCheckInFocused, setIsCheckInFocused] = React.useState(false);
-  const [isCheckOutFocused, setIsCheckOutFocused] = React.useState(false);
+  // this is the schema for the input states
+  interface inputStateType {
+    name: string;
+    label: string;
+    placeholder: string;
+    inputEntered: boolean;
+    value: string;
+  }
+
+  const [inputStates, setInputStates] = React.useState<{
+    [key: string]: inputStateType;
+  }>({
+    location: {
+      name: 'location',
+      label: 'Location',
+      placeholder: 'Where are you going?',
+      inputEntered: false,
+      value: '',
+    },
+    category: {
+      name: 'category',
+      label: 'What do you need?',
+      placeholder: 'E.g. Sony Alpha A6000',
+      inputEntered: false,
+      value: '',
+    },
+    checkIn: {
+      name: 'checkIn',
+      label: 'Check in',
+      placeholder: 'Check in date',
+      inputEntered: false,
+      value: '',
+    },
+    checkOut: {
+      name: 'checkOut',
+      label: 'Check out',
+      placeholder: 'Check out date',
+      inputEntered: false,
+      value: '',
+    },
+  });
 
   const oneIsFocused =
-    isLocationFocused ||
-    isCategoryFocused ||
-    isCheckInFocused ||
-    isCheckOutFocused;
+    inputStates.location.inputEntered ||
+    inputStates.category.inputEntered ||
+    inputStates.checkIn.inputEntered ||
+    inputStates.checkOut.inputEntered;
 
   const Divider = () => {
     return <hr className="rotate bg-gray-300 h-10 w-px" />;
@@ -23,20 +60,52 @@ export default function SearchBox() {
         oneIsFocused ? 'bg-gray-100' : 'bg-white'
       }`}
     >
-      <InputElement
-        label="Location"
-        placeholder="Where are you going?"
-        inputEntered={isLocationFocused}
-        setInputEntered={setIsLocationFocused}
-      />
+      <div
+        className="relative h-full"
+        onClick={() => {
+          setInputStates({
+            ...inputStates,
+            location: {
+              ...inputStates.location,
+              inputEntered: true,
+            },
+          });
+        }}
+      >
+        <InputElement
+          label="Location"
+          placeholder="Where are you going?"
+          inputStates={inputStates}
+          setInputStates={setInputStates}
+          name={inputStates.location.name}
+        />
+        <div
+          className={
+            'absolute mt-5 h-64 w-64 bg-white ' +
+            (inputStates.location.inputEntered ? 'opacity-100' : 'opacity-0')
+          }
+          onBlur={() => {
+            setInputStates({
+              ...inputStates,
+              [inputStates.location.name]: {
+                ...inputStates[inputStates.location.name],
+                inputEntered: false,
+              },
+            });
+          }}
+        >
+          <h1 className="text-black"> Hola </h1>
+        </div>
+      </div>
 
       <Divider />
 
       <InputElement
         label="What do you need?"
         placeholder="E.g. Sony Alpha A6000"
-        inputEntered={isCategoryFocused}
-        setInputEntered={setIsCategoryFocused}
+        inputStates={inputStates}
+        setInputStates={setInputStates}
+        name={inputStates.category.name}
       />
 
       <Divider />
@@ -44,15 +113,17 @@ export default function SearchBox() {
       <InputElement
         label="Check in"
         placeholder="Add a date"
-        inputEntered={isCheckInFocused}
-        setInputEntered={setIsCheckInFocused}
+        inputStates={inputStates}
+        setInputStates={setInputStates}
+        name={inputStates.checkIn.name}
       />
       <Divider />
       <InputElement
         label="Check out"
         placeholder="Add a date"
-        inputEntered={isCheckOutFocused}
-        setInputEntered={setIsCheckOutFocused}
+        inputStates={inputStates}
+        setInputStates={setInputStates}
+        name={inputStates.checkOut.name}
       />
 
       <Divider />
