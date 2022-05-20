@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { InitialInputStates } from './data/InitialInputStates';
 
 export default function InputElement({ ...props }) {
   const {
@@ -19,7 +20,7 @@ export default function InputElement({ ...props }) {
         inputStates[name]?.inputEntered === true
           ? 'shadow-md bg-white'
           : 'hover:bg-gray-200 '
-      } h-full justify-center pl-5 cursor-pointer w-full`}
+      } h-full justify-center pl-5 cursor-pointer w-64`}
       onClick={() => {
         // on click focus on input
         if (locationRef.current !== null) {
@@ -38,23 +39,13 @@ export default function InputElement({ ...props }) {
         }}
         onFocus={() =>
           setInputStates({
-            ...inputStates,
+            ...InitialInputStates,
             [name]: {
               ...inputStates[name],
               inputEntered: true,
             },
           })
         }
-        onBlur={() => {
-          setInputStates({
-            ...inputStates,
-            [name]: {
-              ...inputStates[name],
-              inputEntered: false,
-            },
-          });
-          console.log(inputStates);
-        }}
         value={props.value}
         onChange={(e) => {
           setInputStates({

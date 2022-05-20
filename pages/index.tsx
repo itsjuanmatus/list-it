@@ -4,6 +4,7 @@ import Header from '../components/Header/Header';
 import SearchBox from '../components/SearchBox/SearchBox';
 
 const Home: NextPage = () => {
+
   return (
     <div className="bg-black w-full h-screen flex flex-col">
       <Head>
