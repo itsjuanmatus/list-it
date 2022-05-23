@@ -1,19 +1,23 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import type { City } from '../../../types/location/City';
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<City[]>,
+  res: NextApiResponse<{
+    access_token: string;
+  }>,
 ) {
-  let host = `${process.env.HOST}/cities/search/`;
-  host += `${req.query.name}`;
+  let host = `${process.env.HOST}/auth/login`;
 
   const data = await fetch(host, {
-    method: 'GET',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${req.headers.accesstoken}`,
     },
+    body: JSON.stringify({
+      email: req.body.email,
+      password: req.body.password,
+    }),
   }).then((res) => res.json());
+
   return res.status(200).json(data);
 }

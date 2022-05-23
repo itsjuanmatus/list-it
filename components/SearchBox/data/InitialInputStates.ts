@@ -8,8 +8,8 @@ export const InitialInputStates: InputStatesObjectType = {
     inputEntered: false,
     value: '',
   },
-  category: {
-    name: 'category',
+  product: {
+    name: 'product',
     label: 'What do you need?',
     placeholder: 'E.g. Sony Alpha A6000',
     inputEntered: false,

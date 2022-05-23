@@ -12,8 +12,9 @@ export default function Header() {
       <Image
         src="https://source.unsplash.com/random/400x400"
         alt="user"
-        width={55}
-        height={55}
+        width={45}
+        height={45}
+        objectFit="cover"
         className="cursor-pointer rounded-full"
       />
     </div>

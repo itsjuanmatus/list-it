@@ -12,7 +12,7 @@ export default async function handler(
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${process.env.TOKEN}`,
+      Authorization: `Bearer ${req.headers.accesstoken}`,
     },
   }).then((res) => res.json());
 

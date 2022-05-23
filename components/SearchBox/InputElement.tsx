@@ -1,12 +1,13 @@
 import React, { useRef } from 'react';
 import { InitialInputStates } from './data/InitialInputStates';
+import { actions } from './state/actions';
 
 export default function InputElement({ ...props }) {
   const {
     label,
     placeholder,
     inputStates,
-    setInputStates,
+    dispatch,
     disabled = false,
     type = 'text',
     name = '',
@@ -20,7 +21,7 @@ export default function InputElement({ ...props }) {
         inputStates[name]?.inputEntered === true
           ? 'shadow-md bg-white'
           : 'hover:bg-gray-200 '
-      } h-full justify-center pl-5 cursor-pointer w-64`}
+      } h-full justify-center pl-5 cursor-pointer w-[17vw]`}
       onClick={() => {
         // on click focus on input
         if (locationRef.current !== null) {
@@ -34,27 +35,10 @@ export default function InputElement({ ...props }) {
         className="h-8 placeholder:text-sm placeholder:font-light 
                     focus:outline-none focus:shadow-outline bg-transparent"
         placeholder={placeholder}
-        onMouseEnter={() => {
-          console.log(inputStates);
-        }}
-        onFocus={() =>
-          setInputStates({
-            ...InitialInputStates,
-            [name]: {
-              ...inputStates[name],
-              inputEntered: true,
-            },
-          })
-        }
-        value={props.value}
+        onFocus={() => dispatch(actions.inputEnteredTrue(name))}
+        value={inputStates[name]?.value}
         onChange={(e) => {
-          setInputStates({
-            ...inputStates,
-            [name]: {
-              ...inputStates[name],
-              value: e.target.value,
-            },
-          });
+          dispatch(actions.inputChanged(name, e.target.value));
         }}
         ref={locationRef}
         disabled={disabled}
