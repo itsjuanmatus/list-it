@@ -7,6 +7,9 @@ import { InitialInputStates } from './data/InitialInputStates';
 import InputElement from './InputElement';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { Product } from '../../types/Product';
+import { DayPicker } from 'react-day-picker';
+import 'react-day-picker/dist/style.css';
+import { format } from 'date-fns';
 
 export default function SearchBox() {
   const accessToken = useLocalStorage('accessToken');
@@ -71,6 +74,33 @@ export default function SearchBox() {
       searchProduct(inputStates.product.value);
     }
   }, [inputStates.product]);
+
+  useEffect(() => {
+    // if checkin is less than checkout then set checkout to ''
+    if (inputStates.checkIn.value !== '' && inputStates.checkOut.value !== '') {
+      if (
+        new Date(inputStates.checkIn.value).getTime() >
+        new Date(inputStates.checkOut.value).getTime()
+      ) {
+        dispatch(actions.inputChanged(inputStates.checkOut.name, ''));
+      }
+    }
+
+    // if new Date(inputStates.checkIn.value) is not a valid date then set checkin to ''
+    if (inputStates.checkIn.value !== '') {
+      if (isNaN(new Date(inputStates.checkIn.value).getTime())) {
+        dispatch(actions.inputChanged(inputStates.checkIn.name, ''));
+        dispatch(actions.inputChanged(inputStates.checkOut.name, ''));
+      }
+    }
+
+    // if new Date(inputStates.checkOut.value) is not a valid date then set checkout to ''
+    if (inputStates.checkOut.value !== '') {
+      if (isNaN(new Date(inputStates.checkOut.value).getTime())) {
+        dispatch(actions.inputChanged(inputStates.checkOut.name, ''));
+      }
+    }
+  }, [inputStates.checkIn, inputStates.checkOut]);
 
   return (
     <div
@@ -176,16 +206,76 @@ export default function SearchBox() {
           dispatch={dispatch}
           name={inputStates.checkIn.name}
         />
+        {inputStates.checkIn.inputEntered && (
+          <div
+            className={
+              'absolute mt-5 max-h-80  overflow-y-auto items-center bg-white border rounded-lg flex flex-col gap-y-2' +
+              ' ' +
+              (inputStates.checkIn.inputEntered ? 'opacity-100' : 'opacity-0')
+            }
+          >
+            {/** Calendar Date picker */}
+            <DayPicker
+              mode="single"
+              disabled={{
+                before: new Date(),
+              }}
+              selected={inputStates.checkIn.value}
+              onSelect={(date: any) => {
+                dispatch(
+                  actions.inputChanged(
+                    inputStates.checkIn.name,
+                    format(date, 'PP'),
+                  ),
+                );
+                dispatch(actions.inputEnteredFalse());
+              }}
+            />
+          </div>
+        )}
       </div>
       <Divider />
-      <InputElement
-        label="Check out"
-        placeholder="Add a date"
-        inputStates={inputStates}
-        dispatch={dispatch}
-        name={inputStates.checkOut.name}
-      />
-
+      <div className="relative h-full">
+        <InputElement
+          label="Check out"
+          placeholder="Add a date"
+          inputStates={inputStates}
+          dispatch={dispatch}
+          name={inputStates.checkOut.name}
+        />
+        {inputStates.checkOut.inputEntered && (
+          <div
+            className={
+              'absolute mt-5 max-h-80 overflow-y-auto items-center bg-white border rounded-lg flex flex-col gap-y-2' +
+              ' ' +
+              (inputStates.checkOut.inputEntered ? 'opacity-100' : 'opacity-0')
+            }
+          >
+            {/** Calendar Date picker */}
+            <DayPicker
+              mode="single"
+              selected={inputStates.checkOut.value}
+              disabled={{
+                before: new Date(
+                  inputStates.checkIn.value !== ''
+                    ? new Date(inputStates.checkIn.value).getTime() + 86400000
+                    : // tomorrow's date
+                      new Date().getTime() + 86400000,
+                ),
+              }}
+              onSelect={(date: any) => {
+                dispatch(
+                  actions.inputChanged(
+                    inputStates.checkOut.name,
+                    format(date, 'PP'),
+                  ),
+                );
+                dispatch(actions.inputEnteredFalse());
+              }}
+            />
+          </div>
+        )}
+      </div>
       <Divider />
 
       <button
