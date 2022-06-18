@@ -4,6 +4,7 @@ export interface InputStateType {
   placeholder: string;
   inputEntered: boolean;
   value: string;
+  id?: string;
 }
 
 export type InputStatesObjectType = {

@@ -6,9 +6,10 @@ export const actions = {
     type: 'INPUT_ENTERED_TRUE',
     name,
   }),
-  inputChanged: (name: string, payload: string) => ({
+  inputChanged: (name: string, payload: string, id?: string) => ({
     type: 'INPUT_CHANGED',
     name,
     payload,
+    id,
   }),
 };

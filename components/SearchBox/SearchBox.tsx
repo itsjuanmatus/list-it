@@ -1,18 +1,20 @@
+import { format } from 'date-fns';
+import { useRouter } from 'next/router';
 import React, { useEffect, useReducer, useRef } from 'react';
-import useOutsideAlerter from '../../hooks/useOutsideAlerter';
-import { City } from '../../types/location/City';
-import { actions } from './state/actions';
-import { reducer } from './state/reducer';
-import { InitialInputStates } from './data/InitialInputStates';
-import InputElement from './InputElement';
-import useLocalStorage from '../../hooks/useLocalStorage';
-import { Product } from '../../types/Product';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
-import { format } from 'date-fns';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import useOutsideAlerter from '../../hooks/useOutsideAlerter';
+import { City } from '../../types/location/City';
+import { Product } from '../../types/Product';
+import { InitialInputStates } from './data/InitialInputStates';
+import InputElement from './InputElement';
+import { actions } from './state/actions';
+import { reducer } from './state/reducer';
 
 export default function SearchBox() {
   const accessToken = useLocalStorage('accessToken');
+  const router = useRouter();
 
   const [inputStates, dispatch] = useReducer(reducer, InitialInputStates);
 
@@ -105,7 +107,7 @@ export default function SearchBox() {
   return (
     <div
       ref={wrapperRef}
-      className={`h-24 flex w-[85vw] m-auto items-center border rounded-2xl ${
+      className={`h-24 flex justify-between w-[85vw] max-w-[65rem] m-auto items-center border rounded-2xl ${
         oneIsFocused ? 'bg-gray-100' : 'bg-white'
       }`}
     >
@@ -139,8 +141,10 @@ export default function SearchBox() {
                         actions.inputChanged(
                           inputStates.location.name,
                           city.name,
+                          city._id,
                         ),
                       );
+
                       dispatch(actions.inputEnteredFalse());
                     }}
                     tabIndex={idx}
@@ -279,8 +283,35 @@ export default function SearchBox() {
       <Divider />
 
       <button
-        className="bg-blue-500 hover:bg-blue-400 text-white w-[10vw] py-4 rounded-xl mx-auto flex items-center justify-center gap-x-2"
+        className="bg-blue-500 hover:bg-blue-400 text-white w-[10vw] py-4 rounded-xl mx-auto flex items-center justify-center gap-x-2 max-w-[10rem]"
         type="button"
+        onClick={() => {
+          // base64 but without "/" and "="
+          const base64 = Buffer.from(
+            JSON.stringify(
+              // iterate through inputStates and create a new object with only the values and ids that are not empty
+              Object.keys(inputStates).reduce((acc: any, key: string) => {
+                if (inputStates[key].value !== '') {
+                  acc[key] = {
+                    value: inputStates[key].value,
+                  };
+                }
+
+                if (inputStates[key].id !== '') {
+                  acc[key].id = inputStates[key].id;
+                }
+
+                return acc;
+              }, {}),
+            ),
+            'utf8',
+          )
+            .toString('base64')
+            .replace(/\//g, '_')
+            .replace(/\=/g, '');
+
+          router.push(`/search/${base64}`);
+        }}
       >
         <svg
           className="w-5 h-6 hidden lg:flex"

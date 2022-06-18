@@ -33,22 +33,17 @@ export function reducer(state: InputStatesObjectType, action: any) {
           return acc;
         }, {}),
       };
-    case 'LOCATION_CHANGED':
-      return {
-        ...state,
-        location: {
-          ...state.location,
-          value: action.payload,
-        },
-      };
+
     case 'INPUT_CHANGED':
       return {
         ...state,
         [action.name]: {
           ...state[action.name],
           value: action.payload,
+          ...(action.id ? { id: action.id } : {}),
         },
       };
+
     default:
       return state;
   }

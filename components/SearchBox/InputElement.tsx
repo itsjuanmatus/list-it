@@ -21,7 +21,7 @@ export default function InputElement({ ...props }) {
         inputStates[name]?.inputEntered === true
           ? 'shadow-md bg-white'
           : 'hover:bg-gray-200 '
-      } h-full justify-center pl-5 cursor-pointer w-[17vw]`}
+      } h-full justify-center pl-5 cursor-pointer w-full max-w-max`}
       onClick={() => {
         // on click focus on input
         if (locationRef.current !== null) {
