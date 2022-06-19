@@ -5,12 +5,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Product[]>,
 ) {
+  const { query } = req;
+  console.log(query);
+
   let host = `${process.env.HOST}/listings/find-available/`;
+
   host += `${req.query.startDate}/`;
   host += `${req.query.endDate}/`;
   host += `${req.query.cityId}/`;
-  host += `${req.query.productName}/`;
-  host += `${req.query.countryId}`;
+  host += `${req.query.productName}`;
+  
 
   const data = await fetch(host, {
     method: 'GET',
@@ -19,6 +23,7 @@ export default async function handler(
       Authorization: `Bearer ${req.headers.accesstoken}`,
     },
   }).then((res) => res.json());
+
 
   return res.status(200).json(data);
 }

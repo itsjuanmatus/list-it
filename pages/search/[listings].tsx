@@ -4,9 +4,12 @@ import React, { useEffect } from 'react';
 import Dropdown from '../../components/Dropdowns/Dropdown';
 import Header from '../../components/Header/Header';
 import SearchResult from '../../components/SearchResult/SearchResult';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
 export default function Listings() {
   const [states, setStates] = React.useState<any>({});
+  const [listings, setListings] = React.useState<any>([]);
+  const accesstoken = useLocalStorage('accessToken');
 
   const router = useRouter();
 
@@ -26,8 +29,39 @@ export default function Listings() {
     }
   }, [query]);
 
+  const findAvailableListings = async () => {
+    const startDate = new Date(states.checkIn.value).toISOString();
+
+    const endDate =
+      new Date(states.checkOut.value).toISOString() ||
+      new Date(Date.now() + 86400000).toISOString(); // tomorrow's date
+
+    const cityId = states.location.id;
+    const productName = states.product.value;
+
+    const response = await fetch(
+      `/api/listing/findAvailableListings/?cityId=${cityId}&productName=${productName}&startDate=${startDate}&endDate=${endDate}`,
+      {
+        method: 'GET',
+        headers: {
+          accesstoken,
+        },
+      },
+    );
+
+    const data = await response.json();
+
+    return data;
+  };
+
   useEffect(() => {
+    if (!states.checkIn?.value) return;
+
     console.log(states);
+
+    findAvailableListings().then((data) => {
+      setListings(data);
+    });
   }, [states]);
 
   return (
@@ -61,11 +95,16 @@ export default function Listings() {
         <div className="h-[75vh] overflow-y-auto w-[92.5%] mx-auto">
           <div className="flex flex-col gap-y-12 pb-16">
             {' '}
-            {Array.from({
-              length: 4,
-            }).map((_, i) => (
-              <SearchResult key={i} />
-            ))}
+            {listings.length > 0 &&
+              listings.map((listing: any) => {
+                return (
+                  <SearchResult
+                    key={listing.id}
+                    title={listing.title}
+                    price={listing.price}
+                  />
+                );
+              })}
           </div>
         </div>
       </main>

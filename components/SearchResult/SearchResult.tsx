@@ -42,7 +42,7 @@ export default function SearchResult({
                 router.push('/listing/' + id);
               }}
             >
-              Sony Alpha A7III
+              {title}
             </h3>
           </div>
           <button onClick={onLiked}>
@@ -62,7 +62,7 @@ export default function SearchResult({
             <p className="text-xs text-gray-400">Verified User </p>
           </div>
           <p className="text-md">
-            <span className="font-bold">$220</span> / day
+            <span className="font-bold">${price}</span> / day
           </p>
         </div>
       </div>
