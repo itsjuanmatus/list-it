@@ -27,10 +27,14 @@ export default function SearchBar() {
   };
 
   return (
-    <div className="w-[20vw] relative flex items-center h-[5vh]">
+    <div
+      className="w-[20vw] relative flex items-center min-h-[2.5rem] 
+    "
+    >
       <input
         className="bg-transparent border-gray-200 border-[1px] p-1 pl-3
-      rounded-full focus:outline-none focus:shadow-outline 
+      rounded-full focus:outline-blue-400
+      focus:shadow-outline 
       placeholder:text-sm text-gray-600 text-sm w-full h-full"
         type="text"
         placeholder="Search"

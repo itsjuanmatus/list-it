@@ -31,12 +31,12 @@ export default function Listings() {
   }, [states]);
 
   return (
-    <div className="h-screen flex flex-col items-center w-full justify-start overflow-hidden">
+    <div className="h-screen flex flex-col items-center w-full justify-start overflow-hidden max-w-[75rem] mx-auto">
       <Head>
         <title>List it - Search results </title>
       </Head>
-      <main className="w-full">
-        <div className="flex flex-col fixed top-0 w-full z-10 h-[30vh] bg-white">
+      <main className="w-full flex flex-col gap-y-5">
+        <div className="flex flex-col top-0 w-full bg-white">
           <Header titleColor="text-blue-500" />
           <div className="flex items-center w-[92%] mx-auto gap-x-3 pb-8">
             <Dropdown label="Managua">
@@ -58,7 +58,7 @@ export default function Listings() {
 
           <hr />
         </div>
-        <div className="mt-[30vh] h-[75vh] overflow-y-auto w-[92.5%] mx-auto">
+        <div className="h-[75vh] overflow-y-auto w-[92.5%] mx-auto">
           <div className="flex flex-col gap-y-12 pb-16">
             {' '}
             {Array.from({

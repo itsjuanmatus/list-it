@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default function Header({ titleColor = 'text-white' }) {
   return (
-    <div className="flex w-11/12 mx-auto justify-between py-6">
+    <div className="flex w-11/12 mx-auto justify-between py-6 max-w-[75rem]">
       <Link href="/">
         <div className='cursor-pointer'>
           <h1 className={`${titleColor} text-2xl font-bold`}>list it</h1>

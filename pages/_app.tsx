@@ -7,9 +7,10 @@ import jwtDecode from 'jwt-decode';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
+
   const accessToken = useLocalStorage('accessToken');
 
-/*   useEffect(() => {
+  useEffect(() => {
     if (accessToken) {
       const decodedToken: {
         exp: number;
@@ -33,9 +34,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       if (accessToken === '') {
         router.push('/login');
       }
+    } else if (accessToken === null) {
+      router.push('/login');
     }
   }, [accessToken, router]);
-  (''); */
+  ('');
 
   return <Component {...pageProps} />;
 }
