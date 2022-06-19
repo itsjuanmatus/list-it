@@ -2,9 +2,13 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Header from '../components/Header/Header';
 import SearchBox from '../components/SearchBox/SearchBox';
+import { useSession } from 'next-auth/react';
 
 const Home: NextPage = () => {
+  const { data: session, status } = useSession();
 
+  console.log(session?.accessToken, 'session');
+  console.log(status, 'status');
   return (
     <div className="bg-black w-full h-screen flex flex-col">
       <Head>

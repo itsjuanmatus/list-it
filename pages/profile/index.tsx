@@ -1,8 +1,11 @@
 import Link from 'next/link';
 import React from 'react';
 import Head from 'next/head';
+import { useSession } from 'next-auth/react';
 
 export default function Profile() {
+
+
   return (
     <div className="flex h-screen overflow-hidden">
       <Head>

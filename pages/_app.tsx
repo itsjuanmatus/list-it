@@ -4,13 +4,14 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 import jwtDecode from 'jwt-decode';
+import { SessionProvider } from 'next-auth/react';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   const accessToken = useLocalStorage('accessToken');
 
-  useEffect(() => {
+  /*  useEffect(() => {
     if (accessToken) {
       const decodedToken: {
         exp: number;
@@ -38,9 +39,13 @@ function MyApp({ Component, pageProps }: AppProps) {
       router.push('/login');
     }
   }, [accessToken, router]);
-  ('');
+  (''); */
 
-  return <Component {...pageProps} />;
+  return (
+    <SessionProvider session={pageProps.session}>
+      <Component {...pageProps} />
+    </SessionProvider>
+  );
 }
 
 export default MyApp;

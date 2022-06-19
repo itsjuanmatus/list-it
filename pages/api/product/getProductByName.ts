@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/react';
 import { Product } from '../../../types/Product';
 
 export default async function handler(
@@ -8,11 +9,13 @@ export default async function handler(
   let host = `${process.env.HOST}/products/search/`;
   host += `${req.query.name}`;
 
+  const session = await getSession({ req });
+
   const data = await fetch(host, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${req.headers.accesstoken}`,
+      Authorization: `Bearer ${session?.accessToken}`,
     },
   }).then((res) => res.json());
 
