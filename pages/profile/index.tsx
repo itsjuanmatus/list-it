@@ -12,7 +12,7 @@ export default function Profile() {
         <title>Profile</title>
         <meta name="description" content="list it profile" />
       </Head>
-      <div className="bg-primary-purple w-[15vw] flex flex-col py-5 pl-5">
+      <div className="bg-primary-purple w-[15vw] flex flex-col py-5 pl-5 min-w-max">
         <Link href="/">
           <h1 className="text-white font-bold text-3xl cursor-pointer">
             list it
