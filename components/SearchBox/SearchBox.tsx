@@ -202,6 +202,7 @@ export default function SearchBox() {
       </div>
 
       <Divider />
+
       <div className="relative h-full">
         <InputElement
           label="Check in"
@@ -222,7 +223,8 @@ export default function SearchBox() {
             <DayPicker
               mode="single"
               disabled={{
-                before: new Date(),
+                // available only starting from tomorrow
+                before: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
               }}
               selected={inputStates.checkIn.value}
               onSelect={(date: any) => {
@@ -238,7 +240,9 @@ export default function SearchBox() {
           </div>
         )}
       </div>
+
       <Divider />
+
       <div className="relative h-full">
         <InputElement
           label="Check out"
@@ -280,6 +284,7 @@ export default function SearchBox() {
           </div>
         )}
       </div>
+
       <Divider />
 
       <button
