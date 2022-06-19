@@ -4,7 +4,10 @@ import { NextApiRequest } from 'next';
 
 export default NextAuth({
   // Configure the providers you want to enable.
-
+  session: {
+    strategy: 'jwt',
+    maxAge: 1 * 24 * 60 * 60, // 1 day
+  },
   debug: true,
   providers: [
     CredentialsProvider({
